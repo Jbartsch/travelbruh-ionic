@@ -1,0 +1,24 @@
+<ion-view view-title="Login">
+    <ion-content class="padding">
+        <div ng-if="message" class="card">
+            <div class="item item-text-wrap">
+                {{message}}
+            </div>
+        </div>
+        <div class="list">
+            <form ng-submit="submit()" class="form-signin simple-form">
+                <label class="item item-input item-floating-label">
+                    <span class="input-label">Username</span>
+                    <input ng-model="user.name" type="text" placeholder="Username">
+                </label>
+                <label class="item item-input item-floating-label">
+                    <span class="input-label">Password</span>
+                    <input ng-model="user.pass" type="password" placeholder="Password">
+                </label>
+                <button class="button button-outline button-positive button-block" type="submit">
+                    Login
+                </button>
+            </form>
+        </div>
+    </ion-content>
+</ion-view>
