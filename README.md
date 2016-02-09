@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Jbartsch/travelbruh-ionic.svg?branch=master)](https://travis-ci.org/Jbartsch/travelbruh-ionic)
+
 # TravelBruh
 
 A simple travel planner app built with ionic
