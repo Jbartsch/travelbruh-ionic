@@ -1,6 +1,7 @@
 describe("Login controller", function() {
 
     var $scope,
+        _$rootScope_,
         ctrl,
         $timeout,
         $state,
@@ -18,24 +19,29 @@ describe("Login controller", function() {
         // $controller - injected to create an instance of our controller.
         // $q - injected so we can create promises for our mocks.
         // _$timeout_ - injected to we can flush unresolved promises.
-        inject(function($rootScope, $state, $controller, $q, _$timeout_) {
-
+        inject(function(_$rootScope_, $state, $controller, $q, _$timeout_, _loginService_, _sessionService_) {
+            $rootScope = _$rootScope_;
             // create a scope object for us to use.
             $scope = $rootScope.$new();
-
             // assign $timeout to a scoped variable so we can use
             // $timeout.flush() later. Notice the _underscore_ trick
             // so we can keep our names clean in the tests.
             $timeout = _$timeout_;
-
+            loginService = _loginService_;
+            sessionService = _sessionService_;
             // now run that scope through the controller function,
             // injecting any services or other injectables we need.
             // **NOTE**: this is the only time the controller function
             // will be run, so anything that occurs inside of that
             // will already be done before the first spec.
             ctrl = $controller('LoginCtrl', {
-                $scope: $scope
+                $scope: $scope,
             });
+            deferred = $q.defer();
+            spyOn(loginService, 'doLogin').and.returnValue(deferred.promise);
+            spyOn(sessionService, 'set');
+            spyOn(sessionService, 'delete').and.callFake(function(key) {});
+            spyOn($state, 'go').and.callFake(function(state) {});
         });
 
     });
@@ -43,6 +49,8 @@ describe("Login controller", function() {
     // Test 1: The simplest of the simple.
     // here we're going to make sure the $scope variable
     // exists evaluated.
+
+    // Check existence of all $scope variables
     it("should have a $scope variable", function() {
         expect($scope).toBeDefined();
     });
@@ -58,4 +66,57 @@ describe("Login controller", function() {
     it("should have a $scope.toDash variable", function() {
         expect($scope.toDash).toBeDefined();
     });
+
+    // Test the login
+    it('should get an error when no name and password is provided', function() {
+        deferred.reject();
+        $scope.login();
+        $rootScope.$apply();
+        expect($scope.error).toBe('There has been an error!');
+    });
+    it('should have called the login service', function() {
+        deferred.resolve({
+            'id': 'someId',
+            'name': 'someName'
+        });
+        $scope.user.name = 'admin';
+        $scope.user.pass = 'password';
+        $scope.login($scope.user.name, $scope.user.pass);
+        $rootScope.$apply();
+        expect(loginService.doLogin).toHaveBeenCalledWith('admin', 'password');
+    });
+    it('should get back data after successful login', function() {
+        deferred.resolve({
+            'id': 'someId',
+            'name': 'someName'
+        });
+        $scope.login($scope.user.name, $scope.user.pass);
+        $rootScope.$apply();
+        expect($scope.data.id).toBe('someId');
+        expect($scope.data.name).toBe('someName');
+    });
+    it('should get back data after unsuccessful login', function() {
+        deferred.resolve('id and name not set');
+        $scope.login($scope.user.name, $scope.user.pass);
+        $rootScope.$apply();
+        expect($scope.error).toBe('Login data incorrect')
+    });
+    it('should call the session Service to store the received data locally', function() {
+        deferred.resolve({
+            'id': 'someId',
+            'name': 'someName'
+        });
+        $scope.login($scope.user.name, $scope.user.pass);
+        $rootScope.$apply();
+        expect(sessionService.set).toHaveBeenCalled();
+    });
+
+    // Test the logout
+    it('should have called the logout function and delete the local data', function() {
+        $scope.logout();
+        expect(sessionService.delete).toHaveBeenCalledWith('id');
+        expect(sessionService.delete).toHaveBeenCalledWith('name');
+        expect(sessionService.delete).toHaveBeenCalledWith('session');
+    });
+
 });

@@ -1,10 +1,10 @@
 angular.module('starter.controllers', [])
-.controller('TestCtrl', function($scope) {
-    $scope.init = 'test';
-})
-.controller('DashCtrl', function($scope, $rootScope, sessionService) {
-    $rootScope.loggedIn = sessionService.get('session');
-})
+    .controller('TestCtrl', function($scope) {
+        $scope.init = 'test';
+    })
+    .controller('DashCtrl', function($scope, $rootScope, sessionService) {
+        $rootScope.loggedIn = sessionService.get('session');
+    })
 
 .controller('TripsCtrl', ['$scope', '$rootScope', '$http', 'tripsService', '$location',
     function($scope, $rootScope, $http, tripsService, $location) {
@@ -85,18 +85,22 @@ angular.module('starter.controllers', [])
     function($scope, $state, sessionService, loginService) {
         $scope.user = {};
         $scope.login = function(user) {
-            loginService.doLogin($scope.user.name, $scope.user.pass).then(function(data) {
-                if (data.id && data.name) {
-                    $state.go('tab.trips');
-                    sessionService.set('id', data.id);
-                    sessionService.set('name', data.name);
-                    sessionService.set('session', true);
-                } else {
+            loginService.doLogin($scope.user.name, $scope.user.pass)
+                .then(function(data) {
+                    $scope.data = data;
+                    if ($scope.data.id && $scope.data.name) {
+                        $state.go('tab.trips');
+                        sessionService.set('id', $scope.data.id);
+                        sessionService.set('name', $scope.data.name);
+                        sessionService.set('session', true);
+                    } else {
+                        $scope.error = 'Login data incorrect';
+                    }
+                }).catch(function() {
                     // @todo add a fail message
-                }
-            }).catch(function() {
-                // @todo add a fail message
-            });
+                    $scope.error = 'There has been an error!';
+
+                });
         };
 
         $scope.logout = function() {
