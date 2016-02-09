@@ -21,19 +21,10 @@ describe("Login controller", function() {
         // _$timeout_ - injected to we can flush unresolved promises.
         inject(function(_$rootScope_, $state, $controller, $q, _$timeout_, _loginService_, _sessionService_) {
             $rootScope = _$rootScope_;
-            // create a scope object for us to use.
             $scope = $rootScope.$new();
-            // assign $timeout to a scoped variable so we can use
-            // $timeout.flush() later. Notice the _underscore_ trick
-            // so we can keep our names clean in the tests.
             $timeout = _$timeout_;
             loginService = _loginService_;
             sessionService = _sessionService_;
-            // now run that scope through the controller function,
-            // injecting any services or other injectables we need.
-            // **NOTE**: this is the only time the controller function
-            // will be run, so anything that occurs inside of that
-            // will already be done before the first spec.
             ctrl = $controller('LoginCtrl', {
                 $scope: $scope,
             });

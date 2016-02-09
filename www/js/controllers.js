@@ -6,12 +6,9 @@ angular.module('starter.controllers', [])
         $rootScope.loggedIn = sessionService.get('session');
     })
 
-.controller('TripsCtrl', ['$scope', '$rootScope', '$http', 'tripsService', '$location',
-    function($scope, $rootScope, $http, tripsService, $location) {
-
-        getTrips();
-
-        function getTrips() {
+.controller('TripsCtrl', ['$scope', '$rootScope', 'tripsService',
+    function($scope, $rootScope, tripsService) {
+        $scope.getTrips = function getTrips() {
             tripsService.getAll().then(function(data) {
                 $rootScope.allTrips = data.data;
             });
@@ -38,7 +35,7 @@ angular.module('starter.controllers', [])
                 }]
             };
             tripsService.set(postData).then(function(data) {
-                getTrips();
+                $scope.getTrips();
             }).catch(function() {
                 console.log('unable to add Trip');
             });
@@ -46,7 +43,7 @@ angular.module('starter.controllers', [])
         $scope.deleteTrip = function(id) {
             console.log(id);
             tripsService.delete(id).then(function(data) {
-                getTrips();
+                $scope.getTrips();
             }).catch(function() {
                 console.log('unable to delete');
             });
@@ -65,9 +62,6 @@ angular.module('starter.controllers', [])
 
 .controller('AccountCtrl', ['$scope', 'sessionService', '$state', '$rootScope', 'loginService',
     function($scope, sessionService, $state, $rootScope, loginService) {
-        $scope.settings = {
-            enableFriends: true
-        };
         $scope.logout = function() {
             // @todo investigate wether logout on the server is needed
             // loginService.doLogout().then(function(data) {

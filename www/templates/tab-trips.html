@@ -1,4 +1,4 @@
-<ion-view view-title="Trips">
+<ion-view view-title="Trips" ng-init="getTrips()">
     <ion-content>
         <ion-refresher pulling-text="Pull to refresh" on-refresh="doRefresh()">
         </ion-refresher>
@@ -13,8 +13,10 @@
                 </ion-option-button>
             </ion-item>
         </ion-list>
-        <button ng-click="addTrip()" class="button button-balanced icon ion-gear-a ion-ios-plus-empty">
-            Add trip
-        </button>
+        <div class="row row-center">
+            <button ng-click="addTrip()" class="button button-full button-balanced icon ion-gear-a ion-ios-plus-empty">
+                Add trip
+            </button>
+        </div>
     </ion-content>
 </ion-view>
