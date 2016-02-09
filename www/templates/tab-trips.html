@@ -1,17 +1,20 @@
 <ion-view view-title="Trips">
-  <ion-content>
-  Hello Trips
-    <ion-list>
-      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="trip in itineraries" type="item-text-wrap" href="#/tab/chats/{{trip.id}}">
-        <img ng-src="{{trip.face}}">
-        <h2>{{trip.title[0].value}}</h2>
-        <p>itinerary.field_date[0].value</p>
-        <i class="icon ion-chevron-right icon-accessory"></i>
-
-        <ion-option-button class="button-assertive" ng-click="remove(trip)">
-          Delete
-        </ion-option-button>
-      </ion-item>
-    </ion-list>
-  </ion-content>
+    <ion-content>
+        <ion-refresher pulling-text="Pull to refresh" on-refresh="doRefresh()">
+        </ion-refresher>
+        <ion-list>
+            <ion-item class="item-remove-animate item-avatar item-icon-left item-icon-right" ng-repeat="trip in allTrips" type="item-text-wrap" href="#/tab/trips/{{trip.nid[0].value}}">
+                <i class="icon ion-map"></i>
+                <h2>{{trip.title[0].value}}</h2>
+                <p>{{trip.field_date[0].value}}</p>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+                <ion-option-button class="button-assertive" ng-click="deleteTrip({{trip.nid[0].value}})">
+                    Delete
+                </ion-option-button>
+            </ion-item>
+        </ion-list>
+        <button ng-click="addTrip()" class="button button-balanced icon ion-gear-a ion-ios-plus-empty">
+            Add trip
+        </button>
+    </ion-content>
 </ion-view>

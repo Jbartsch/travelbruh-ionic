@@ -1,80 +1,112 @@
 angular.module('starter.controllers', [])
-
-.controller('DashCtrl', function($scope) {})
-
-.controller('TripsCtrl', function($scope, $rootScope, $http, travelBruhFactory, $location) {
-    // With the new view caching in Ionic, Controllers are only called
-    // when they are recreated or on app start, instead of every page change.
-    // To listen for when this page is active (for example, to refresh data),
-    // listen for the $ionicView.enter event:
-    //
-    //$scope.$on('$ionicView.enter', function(e) {
-    //});
-
-
+.controller('TestCtrl', function($scope) {
+    $scope.init = 'test';
+})
+.controller('DashCtrl', function($scope, $rootScope, sessionService) {
+    $rootScope.loggedIn = sessionService.get('session');
 })
 
-.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-    $scope.chat = Chats.get($stateParams.chatId);
-})
+.controller('TripsCtrl', ['$scope', '$rootScope', '$http', 'tripsService', '$location',
+    function($scope, $rootScope, $http, tripsService, $location) {
 
-.controller('AccountCtrl', function($scope) {
+        getTrips();
+
+        function getTrips() {
+            tripsService.getAll().then(function(data) {
+                $rootScope.allTrips = data.data;
+            });
+        };
+
+
+        // @todo refactor this bit
+        $scope.doRefresh = function() {
+            $scope.$broadcast('scroll.refreshComplete');
+        };
+
+        $scope.addTrip = function() {
+            var postData = {
+                "_links": {
+                    "type": {
+                        "href": "http://api.travel-bruh.com/rest/type/node/itinerary"
+                    }
+                },
+                "title": [{
+                    "value": "Postman post"
+                }],
+                "body": [{
+                    "value": "a test post from postman"
+                }]
+            };
+            tripsService.set(postData).then(function(data) {
+                getTrips();
+            }).catch(function() {
+                console.log('unable to add Trip');
+            });
+        };
+        $scope.deleteTrip = function(id) {
+            console.log(id);
+            tripsService.delete(id).then(function(data) {
+                getTrips();
+            }).catch(function() {
+                console.log('unable to delete');
+            });
+        };
+    }
+])
+
+.controller('TripDetailCtrl', ['$scope', '$rootScope', '$stateParams', 'tripsService', '$location',
+    function($scope, $rootScope, $stateParams, tripsService, $location) {
+        tripsService.getOne($stateParams.tripId).then(function(data) {
+            $rootScope.trip = data.data[0];
+        });
+
+    }
+])
+
+.controller('AccountCtrl', ['$scope', 'sessionService', '$state', '$rootScope', 'loginService',
+    function($scope, sessionService, $state, $rootScope, loginService) {
         $scope.settings = {
             enableFriends: true
         };
-    })
-    .controller('LoginCtrl', ['$scope', '$rootScope', '$http', 'loginService', '$window', '$state',
-        function($scope, $rootScope, $http, loginService, $window, $state) {
-            $rootScope.user = {};
-            $scope.submit = function(user) {
-                loginService.doLogin($scope.user.name, $scope.user.pass).then(function(data) {
-                    console.log(data);
-                    if (data.id && data.name) {
-                        $rootScope.user.data = data;
-                        $rootScope.message = 'Login success';
-                        $state.go('tab.dash');
-                    } else {
-                        $rootScope.message = 'Login failed';
-                    }
-                }).catch(function() {
-                    console.log('unable to login');
-                });
-            };
+        $scope.logout = function() {
+            // @todo investigate wether logout on the server is needed
+            // loginService.doLogout().then(function(data) {
+            //     console.log(data);
+            // });
+            sessionService.delete('id');
+            sessionService.delete('name');
+            sessionService.delete('session');
+            $state.go('login');
+        };
+    }
+])
 
-            $scope.logout = function() {
+.controller('LoginCtrl', ['$scope', '$state', 'sessionService', 'loginService',
+    function($scope, $state, sessionService, loginService) {
+        $scope.user = {};
+        $scope.login = function(user) {
+            loginService.doLogin($scope.user.name, $scope.user.pass).then(function(data) {
+                if (data.id && data.name) {
+                    $state.go('tab.trips');
+                    sessionService.set('id', data.id);
+                    sessionService.set('name', data.name);
+                    sessionService.set('session', true);
+                } else {
+                    // @todo add a fail message
+                }
+            }).catch(function() {
+                // @todo add a fail message
+            });
+        };
 
+        $scope.logout = function() {
+            sessionService.delete('id');
+            sessionService.delete('name');
+            sessionService.delete('session');
+        };
 
-                $http({
-                    method: 'GET',
-                    withCredentials: true,
-                    url: $rootScope.baseUrl + '/rest/session/token',
-                    headers: {
-                        'Content-Type': 'application/hal+json',
-                    }
-                }).then(function successCallback(response) {
-                    $http({
-                        method: 'POST',
-                        withCredentials: true,
-                        url: 'http://travelbruh.localhost/api/v2/user/logout',
-                        headers: {
-                            "content-type": "application/json",
-                            "accept": "application/json",
-                            'X-CSRF-Token': response.data
-                        }
-                    }).then(function successCallback(response) {
-                        // $cookies.remove($window.sessionStorage.tokenName);
-                        window.localStorage['loggedIn'] = false;
-                        $rootScope.loggedIn = false;
-                    }, function errorCallback(response) {
-                        console.log('error ' + response.status);
-
-                    });
-                }, function errorCallback(response) {
-
-                });
-            };
-
-
-
+        $scope.toDash = function() {
+            $state.go('tab.dash');
         }
-    ]);
+    }
+]);

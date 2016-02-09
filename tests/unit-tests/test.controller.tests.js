@@ -1,24 +1,17 @@
-describe("Login controller", function() {
+describe("Unit Testing Examples", function () {
 
-    var $scope,
-        ctrl,
-        $timeout,
-        $state,
-        sessionService,
-        loginService;
+    var $scope, ctrl, $timeout;
 
-    beforeEach(function() {
+    beforeEach(function () {
 
-        module('starter.controllers');
-        module('ui.router');
-        module('starter.services');
+        module("starter.controllers");
 
         // INJECT! This part is critical
         // $rootScope - injected to create a new $scope instance.
         // $controller - injected to create an instance of our controller.
         // $q - injected so we can create promises for our mocks.
         // _$timeout_ - injected to we can flush unresolved promises.
-        inject(function($rootScope, $state, $controller, $q, _$timeout_) {
+        inject(function ($rootScope, $controller, $q, _$timeout_) {
 
             // create a scope object for us to use.
             $scope = $rootScope.$new();
@@ -33,7 +26,7 @@ describe("Login controller", function() {
             // **NOTE**: this is the only time the controller function
             // will be run, so anything that occurs inside of that
             // will already be done before the first spec.
-            ctrl = $controller('LoginCtrl', {
+            ctrl = $controller('TestCtrl', {
                 $scope: $scope
             });
         });
@@ -46,16 +39,5 @@ describe("Login controller", function() {
     it("should have a $scope variable", function() {
         expect($scope).toBeDefined();
     });
-    it("should have a $scope.user variable", function() {
-        expect($scope.user).toBeDefined();
-    });
-    it("should have a $scope.login variable", function() {
-        expect($scope.login).toBeDefined();
-    });
-    it("should have a $scope.logout variable", function() {
-        expect($scope.logout).toBeDefined();
-    });
-    it("should have a $scope.toDash variable", function() {
-        expect($scope.toDash).toBeDefined();
-    });
+
 });

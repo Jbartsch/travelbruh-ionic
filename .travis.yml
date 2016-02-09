@@ -1,4 +1,4 @@
 language: node_js
 node_js:
-  - "4"
-script: "npm test"
+    - "4"
+script: node_modules/karma/bin/karma start tests/unit-tests.conf.js --single-run

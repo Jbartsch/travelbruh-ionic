@@ -1,11 +1,29 @@
-<ion-view view-title="Dashboard">
-    <ion-content class="padding">
+<ion-view view-title="Dashboard" has-header="true">
+    <ion-content class="padding has-header">
         <div class="card">
             <div class="item item-text-wrap">
                 <p>You are on the dashboard view</p>
-                <p>ID: {{user.data.id}}</p>
-                <p>ID: {{user.data.name}}</p>
+                <p>Login: {{loggedIn}}</p>
             </div>
         </div>
+
+    <div class="row"><div class="col text-center">
+      <h3 class="title">Welcome {{username}}!</h3>
+      This could be your Dashboard.
+      <br><br><br>
+      <button class="button button-full button-positive" ng-click="performValidRequest()">
+        Make Valid Request
+      </button>
+      <button class="button button-full button-energized" ng-click="performUnauthorizedRequest()">
+        Make Request for unauthorized resource
+      </button>
+      <button class="button button-full button-assertive" ng-click="performInvalidRequest()">
+        Make Request without valid token
+      </button>
+      <br><br>
+      {{response}}
+    </div></div>
+
+
     </ion-content>
 </ion-view>
