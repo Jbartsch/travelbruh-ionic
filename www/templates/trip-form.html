@@ -1,0 +1,34 @@
+<ion-view view-title="Add trip" has-header="true">
+    <ion-content class="padding has-header">
+        <div class="list">
+            <form ng-submit="addTrip(destination, body)" class="form-signin simple-form">
+                <div class="list">
+                    <label class="item item-input">
+                        <input ng-model="destination" type="text" placeholder="Destination">
+                    </label>
+                    <label class="item item-input">
+                        <textarea ng-model="body" placeholder="Comments" rows="4"></textarea>
+                    </label>
+                </div>
+                <label class="item item-input">
+                    <span class="input-label">From</span>
+                    <input type="date">
+                </label>
+                <label class="item item-input">
+                    <span class="input-label">To</span>
+                    <input type="date">
+                </label>
+                <ion-list>
+                    <ion-checkbox ng-model="cityTrip">City Trip</ion-checkbox>
+                    <ion-checkbox ng-model="dayTrip">Day Trip</ion-checkbox>
+                </ion-list>
+                <button class="button button-balanced button-full icon ion-plus" type="submit">
+                    Add trip
+                </button>
+            </form>
+        </div>
+        <button ng-click="cancel()" class="button button-light button-full button-clear" type="submit">
+            cancel
+        </button>
+    </ion-content>
+</ion-view>

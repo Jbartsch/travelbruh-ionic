@@ -1,10 +1,3 @@
-// Ionic Starter App
-
-// angular.module is a global place for creating, registering and retrieving Angular modules
-// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
-// the 2nd parameter is an array of 'requires'
-// 'starter.services' is found in services.js
-// 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     .run(function($rootScope, $state, sessionService) {
         $rootScope.baseUrl = 'http://api.travel-bruh.com';
@@ -35,6 +28,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     $stateProvider
 
     // setup an abstract state for the tabs directive
+
         .state('tab', {
         url: '/tab',
         abstract: true,
@@ -43,6 +37,21 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
     // Each tab has its own nav history stack:
 
+    .state('tab.trips', {
+        url: '/trips',
+        views: {
+            'tab-trips': {
+                templateUrl: 'templates/tab-trips.html',
+                controller: 'TripsCtrl'
+            }
+        },
+        onEnter: function($state, sessionService) {
+            if (!sessionService.get('session')) {
+                $state.go('login');
+            }
+        }
+    })
+
     .state('tab.dash', {
         url: '/dash',
         views: {
@@ -50,27 +59,43 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 templateUrl: 'templates/tab-dash.html',
                 controller: 'DashCtrl'
             }
+        },
+        onEnter: function($state, sessionService) {
+            if (!sessionService.get('session')) {
+                $state.go('login');
+            }
         }
     })
 
-    .state('tab.trips', {
-            url: '/trips',
-            views: {
-                'tab-trips': {
-                    templateUrl: 'templates/tab-trips.html',
-                    controller: 'TripsCtrl'
-                }
+    .state('tab.trip-form', {
+        url: '/trips/add',
+        views: {
+            'tab-trips': {
+                templateUrl: 'templates/trip-form.html',
+                controller: 'TripsFormCtrl'
             }
-        })
-        .state('tab.trip-detail', {
-            url: '/trips/:tripId',
-            views: {
-                'tab-trips': {
-                    templateUrl: 'templates/trip-detail.html',
-                    controller: 'TripDetailCtrl'
-                }
+        },
+        onEnter: function($state, sessionService) {
+            if (!sessionService.get('session')) {
+                $state.go('login');
             }
-        })
+        }
+    })
+
+    .state('tab.trip-detail', {
+        url: '/trips/:tripId',
+        views: {
+            'tab-trips': {
+                templateUrl: 'templates/trip-detail.html',
+                controller: 'TripDetailCtrl'
+            }
+        },
+        onEnter: function($state, sessionService) {
+            if (!sessionService.get('session')) {
+                $state.go('login');
+            }
+        }
+    })
 
     .state('tab.account', {
         url: '/account',
@@ -79,18 +104,26 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 templateUrl: 'templates/tab-account.html',
                 controller: 'AccountCtrl'
             }
+        },
+        onEnter: function($state, sessionService) {
+            if (!sessionService.get('session')) {
+                $state.go('login');
+            }
         }
     })
 
     .state('login', {
         url: '/login',
         templateUrl: 'templates/login.html',
-        controller: 'LoginCtrl'
-    })
-
-    ;
+        controller: 'LoginCtrl',
+        onEnter: function($state, sessionService) {
+            if (sessionService.get('session')) {
+                $state.go('tab.trips');
+            }
+        }
+    });
 
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/login');
+    $urlRouterProvider.otherwise('/tab/trips');
 
 });

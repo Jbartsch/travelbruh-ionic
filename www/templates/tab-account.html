@@ -1,9 +1,22 @@
 <ion-view view-title="Account">
-    <ion-content>
-        <ion-list>
-            <button ng-click="logout()" class="button button-assertive button-block">
+    <ion-content ng-class="padding">
+        <div class="card">
+            <div class="item item-text-wrap">
+                <p>Login: {{loggedIn}}</p>
+            </div>
+        </div>
+        <div class="row row-top">
+            <div class="col text-center">
+                <h3 class="title">Hello {{username}}!</h3> This could be your settings page.
+                <br>
+                <br>
+                <br>
+            </div>
+        </div>
+        <div class="row row-center">
+            <button ng-click="logout()" class="button button-assertive button-full icon ion-log-out">
                 Logout
             </button>
-        </ion-list>
+        </div>
     </ion-content>
 </ion-view>

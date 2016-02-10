@@ -1,11 +1,17 @@
-<ion-view view-title="TravelBruh Login" has-header="true">
+<ion-view view-title="TravelBruh Login" has-header="true" class="login">
     <ion-content class="padding has-header">
-        <div ng-if="message" class="card">
-            <div class="item item-text-wrap">
-                {{message}}
-            </div>
-        </div>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
         <div class="list">
+            <div class="card">
+                <div class="item item-text-wrap">
+                    message area: {{message}} {{error}}
+                </div>
+            </div>
             <form ng-submit="login()" class="form-signin simple-form">
                 <label class="item item-input item-floating-label">
                     <span class="input-label">Username</span>
@@ -15,12 +21,12 @@
                     <span class="input-label">Password</span>
                     <input ng-model="user.pass" type="password" placeholder="Password">
                 </label>
-                <button class="button button-balanced button-block" type="submit">
+                <button class="button button-balanced button-full icon ion-log-in" type="submit">
                     Login
                 </button>
             </form>
         </div>
-        <button ng-click="toDash()" class="button button-balanced button-block" type="submit">
+        <button ng-click="toDash()" class="button button-light button-full button-clear" type="submit">
             To dash
         </button>
     </ion-content>

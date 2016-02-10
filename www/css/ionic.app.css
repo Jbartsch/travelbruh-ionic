@@ -9731,3 +9731,14 @@ a.button {
   opacity: 0;
   -webkit-transition-duration: 0s;
   transition-duration: 0s; }
+
+.login {
+  background-image: url("../img/login_bg.png"); }
+  .login:before {
+    background-color: rgba(0, 0, 0, 0.6); }
+
+.login .list {
+  padding: 10px; }
+
+.login .item-input input {
+  color: #fff; }

@@ -17,9 +17,22 @@ $dark:                            #444 !default;
 
 // The path for our ionicons font files, relative to the built CSS in www/css
 $ionicons-font-path: "../lib/ionic/fonts" !default;
-
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
-
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700);
-$font-family-base: "Roboto 100", sans-serif !default;
+$font-family-base: "Roboto 100",
+sans-serif !default;
+.login {
+    background-image: url('../img/login_bg.png');
+    &:before {
+        background-color: rgba(0, 0, 0, 0.6);
+    }
+}
+
+.login .list {
+    padding: 10px;
+}
+
+.login .item-input input {
+    color: #fff;
+}

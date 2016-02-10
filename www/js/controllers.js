@@ -1,55 +1,81 @@
 angular.module('starter.controllers', [])
-    .controller('TestCtrl', function($scope) {
-        $scope.init = 'test';
-    })
-    .controller('DashCtrl', function($scope, $rootScope, sessionService) {
-        $rootScope.loggedIn = sessionService.get('session');
-    })
 
-.controller('TripsCtrl', ['$scope', '$rootScope', 'tripsService',
-    function($scope, $rootScope, tripsService) {
+.controller('DashCtrl', function($scope, $rootScope, sessionService) {
+
+    $scope.updateStatus = function() {
+        $rootScope.session = sessionService.get('session');
+    };
+    $scope.id = sessionService.get('id');
+    $scope.name = sessionService.get('name');
+})
+
+.controller('TripsCtrl', ['$scope', '$rootScope', '$state', 'tripsService',
+    function($scope, $rootScope, $state, tripsService) {
         $scope.getTrips = function getTrips() {
             tripsService.getAll().then(function(data) {
-                $rootScope.allTrips = data.data;
+
             });
         };
-
-
+        $scope.doRefresh = function() {
+            $scope.getTrips();
+        };
         // @todo refactor this bit
         $scope.doRefresh = function() {
             $scope.$broadcast('scroll.refreshComplete');
         };
 
         $scope.addTrip = function() {
-            var postData = {
-                "_links": {
-                    "type": {
-                        "href": "http://api.travel-bruh.com/rest/type/node/itinerary"
-                    }
-                },
-                "title": [{
-                    "value": "Postman post"
-                }],
-                "body": [{
-                    "value": "a test post from postman"
-                }]
-            };
-            tripsService.set(postData).then(function(data) {
-                $scope.getTrips();
-            }).catch(function() {
-                console.log('unable to add Trip');
-            });
+            $state.go('tab.trip-form');
         };
         $scope.deleteTrip = function(id) {
-            console.log(id);
             tripsService.delete(id).then(function(data) {
                 $scope.getTrips();
             }).catch(function() {
-                console.log('unable to delete');
             });
         };
     }
 ])
+
+.controller('TripsFormCtrl', ['$scope', '$state', 'tripsService', function($scope, $state, tripsService) {
+
+    $scope.cancel = function() {
+        $state.go('tab.trips');
+    };
+
+    $scope.addTrip = function(destination, body, from, to) {
+        var postData = {};
+        postData._links = {
+            "type": {
+                "href": "http://api.travel-bruh.com/rest/type/node/itinerary"
+            }
+        };
+        postData.title = [];
+        postData.title[0] = {
+            "value": destination
+        };
+        postData.body = [];
+        postData.body[0] = {
+            "value": body
+        };
+
+        postData.body.field_end_date = [];
+        postData.body.field_end_date[0] = {
+            'value': from
+        };
+        postData.body.field_date = [];
+        postData.body.field_date[0] = {
+            'value': to
+        };
+
+
+
+        tripsService.set(postData).then(function(data) {
+            $state.go('tab.trips');
+            tripsService.getAll();
+        }).catch(function(data) {
+        });
+    };
+}])
 
 .controller('TripDetailCtrl', ['$scope', '$rootScope', '$stateParams', 'tripsService', '$location',
     function($scope, $rootScope, $stateParams, tripsService, $location) {
@@ -63,14 +89,9 @@ angular.module('starter.controllers', [])
 .controller('AccountCtrl', ['$scope', 'sessionService', '$state', '$rootScope', 'loginService',
     function($scope, sessionService, $state, $rootScope, loginService) {
         $scope.logout = function() {
-            // @todo investigate wether logout on the server is needed
-            // loginService.doLogout().then(function(data) {
-            //     console.log(data);
-            // });
-            sessionService.delete('id');
-            sessionService.delete('name');
-            sessionService.delete('session');
+            loginService.doLogout();
             $state.go('login');
+
         };
     }
 ])
@@ -83,10 +104,9 @@ angular.module('starter.controllers', [])
                 .then(function(data) {
                     $scope.data = data;
                     if ($scope.data.id && $scope.data.name) {
+                        $scope.user.name = '';
+                        $scope.user.pass = '';
                         $state.go('tab.trips');
-                        sessionService.set('id', $scope.data.id);
-                        sessionService.set('name', $scope.data.name);
-                        sessionService.set('session', true);
                     } else {
                         $scope.error = 'Login data incorrect';
                     }
@@ -96,13 +116,6 @@ angular.module('starter.controllers', [])
 
                 });
         };
-
-        $scope.logout = function() {
-            sessionService.delete('id');
-            sessionService.delete('name');
-            sessionService.delete('session');
-        };
-
         $scope.toDash = function() {
             $state.go('tab.dash');
         }
