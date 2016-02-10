@@ -2,26 +2,9 @@
     <ion-content class="padding has-header">
         <div class="text-center">
             <h1>Status</h1>
+            <h2>{{username}}</h2>
             <h2 ng-class="{balanced: session}" ng-if="session" class="title">Logged in</h2>
             <h2 ng-class="{assertive: !session}" ng-if="!session" class="title">Not logged in</h2>
         </div>
-<!--         <div class="row">
-            <div class="col text-center">
-                <br>
-                <br>
-                <br>
-                <button class="button button-full button-positive" ng-click="performValidRequest()">
-                    Make Valid Request
-                </button>
-                <button class="button button-full button-energized" ng-click="performUnauthorizedRequest()">
-                    Make Request for unauthorized resource
-                </button>
-                <button class="button button-full button-assertive" ng-click="performInvalidRequest()">
-                    Make Request without valid token
-                </button>
-                <br>
-                <br> {{response}}
-            </div>
-        </div> -->
     </ion-content>
 </ion-view>

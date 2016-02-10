@@ -15,7 +15,7 @@ angular.module('starter.services', [])
                     "username": username,
                     "password": password
                 },
-                url: $rootScope.baseUrl + '/api/v2/user/login',
+                url: $rootScope.baseUrl + '/api/v1/user/login',
                 headers: {
                     "content-type": "application/json",
                     "accept": "application/json"
@@ -80,6 +80,7 @@ angular.module('starter.services', [])
             getToken();
 
             var authdata = sessionService.get('authdata')
+            var username = sessionService.get('username')
             return {
                 set: function(data) {
                     return $http({
@@ -110,7 +111,7 @@ angular.module('starter.services', [])
                 getAll: function() {
                     return $http({
                         method: 'GET',
-                        url: $rootScope.baseUrl + '/api/v1/itinerary',
+                        url: $rootScope.baseUrl + '/api/v1/itinerary/',
                         headers: {
                             'content-type': 'application/json',
                         }

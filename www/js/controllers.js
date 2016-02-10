@@ -7,13 +7,13 @@ angular.module('starter.controllers', [])
     };
     $scope.id = sessionService.get('id');
     $scope.name = sessionService.get('name');
+    $rootScope.username = sessionService.get('username');
 })
 
 .controller('TripsCtrl', ['$scope', '$rootScope', '$state', 'tripsService',
     function($scope, $rootScope, $state, tripsService) {
         $scope.getTrips = function getTrips() {
             tripsService.getAll().then(function(data) {
-
             });
         };
         $scope.doRefresh = function() {
@@ -30,8 +30,7 @@ angular.module('starter.controllers', [])
         $scope.deleteTrip = function(id) {
             tripsService.delete(id).then(function(data) {
                 $scope.getTrips();
-            }).catch(function() {
-            });
+            }).catch(function() {});
         };
     }
 ])
@@ -72,8 +71,7 @@ angular.module('starter.controllers', [])
         tripsService.set(postData).then(function(data) {
             $state.go('tab.trips');
             tripsService.getAll();
-        }).catch(function(data) {
-        });
+        }).catch(function(data) {});
     };
 }])
 
