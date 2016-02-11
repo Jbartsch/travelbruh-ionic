@@ -4,11 +4,12 @@ describe("Account controller", function() {
 
     beforeEach(function() {
 
-        module("starter.controllers");
+        module('starter.controllers');
         module('ui.router');
         module('starter.services');
 
-        inject(function(_$rootScope_, _$state_, $controller, $q, _$timeout_, _loginService_, _sessionService_) {
+        inject(function(_$rootScope_, _$state_, $controller, $q, _$timeout_,
+         _loginService_, _sessionService_) {
             $rootScope = _$rootScope_;
             $state = _$state_;
             $scope = $rootScope.$new();
@@ -32,8 +33,5 @@ describe("Account controller", function() {
     // exists evaluated.
     it("should have a $scope variable", function() {
         expect($scope).toBeDefined();
-    });
-    it("should have a $scope variable", function() {
-        expect($scope.logout).toBeDefined();
     });
 });

@@ -20,6 +20,7 @@ module.exports = function(config) {
             '../www/lib/ionic/js/angular-ui/angular-ui-router.js',
             '../www/lib/angular-animate/angular-animate.js',
             '../www/lib/angular-sanitize/angular-sanitize.js',
+            '../www/lib/angular-google-places-autocomplete/src/autocomplete.js',
             // App code
             '../www/js/*.js',
             // Test files
