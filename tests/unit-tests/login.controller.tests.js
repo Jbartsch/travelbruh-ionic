@@ -51,9 +51,6 @@ describe("Login controller", function() {
     it("should have a $scope.login variable", function() {
         expect($scope.login).toBeDefined();
     });
-    it("should have a $scope.toDash variable", function() {
-        expect($scope.toDash).toBeDefined();
-    });
 
     // Test the login
     it('should get an error when no name and password is provided', function() {
