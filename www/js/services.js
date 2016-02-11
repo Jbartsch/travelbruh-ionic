@@ -155,6 +155,21 @@ angular.module('starter.services', [])
                         return response;
                     });
                 },
+                update: function(data) {
+                    return $http({
+                        method: 'PATCH',
+                        url: $rootScope.baseUrl + '/node/' + nid,
+                        data: data,
+                        headers: {
+                            'Content-Type': 'application/hal+json',
+                            'Accept': 'application.json',
+                            'Authorization': 'Basic ' + authdata,
+                            'X-CSRF-Token': $rootScope.csrfToken
+                        }
+                    }).success(function(response) {
+                        $rootScope.reload = !$rootScope.reload;
+                    })
+                },
                 delete: function(id) {
                     return $http({
                         method: 'DELETE',

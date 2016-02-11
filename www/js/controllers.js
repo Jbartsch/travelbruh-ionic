@@ -96,7 +96,7 @@ angular.module('starter.controllers', ['google.places'])
 .controller('TripDetailEditCtrl', ['$scope', '$rootScope', '$stateParams', 'tripsService', '$location',
     function($scope, $rootScope, $stateParams, tripsService, $location) {
         tripsService.getOne($stateParams.tripId).then(function(data) {
-            // $rootScope.trip = data.data[0];
+                $rootScope.trip = data.data[0];
 
         });
 
