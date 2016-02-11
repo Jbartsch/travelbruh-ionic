@@ -51,9 +51,6 @@ describe("Login controller", function() {
     it("should have a $scope.login variable", function() {
         expect($scope.login).toBeDefined();
     });
-    it("should have a $scope.logout variable", function() {
-        expect($scope.logout).toBeDefined();
-    });
     it("should have a $scope.toDash variable", function() {
         expect($scope.toDash).toBeDefined();
     });
@@ -91,23 +88,6 @@ describe("Login controller", function() {
         $scope.login($scope.user.name, $scope.user.pass);
         $rootScope.$apply();
         expect($scope.error).toBe('Login data incorrect')
-    });
-    it('should call the session Service to store the received data locally', function() {
-        deferred.resolve({
-            'id': 'someId',
-            'name': 'someName'
-        });
-        $scope.login($scope.user.name, $scope.user.pass);
-        $rootScope.$apply();
-        expect(sessionService.set).toHaveBeenCalled();
-    });
-
-    // Test the logout
-    it('should have called the logout function and delete the local data', function() {
-        $scope.logout();
-        expect(sessionService.delete).toHaveBeenCalledWith('id');
-        expect(sessionService.delete).toHaveBeenCalledWith('name');
-        expect(sessionService.delete).toHaveBeenCalledWith('session');
     });
 
 });

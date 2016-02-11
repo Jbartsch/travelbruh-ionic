@@ -33,11 +33,11 @@ describe("Trips controller", function() {
     it("should have a $scope variable", function() {
         expect($scope).toBeDefined();
     });
-    it("should get all trips from the tripsService", function() {
-        deferred.resolve({'data':'trips Data'});
-        $scope.getTrips();
-        $rootScope.$apply();
-        expect($rootScope.allTrips).toBe('trips Data');
-    });
+    // it("should get all trips from the tripsService", function() {
+    //     deferred.resolve({'data':'trips Data'});
+    //     $scope.getTrips();
+    //     $rootScope.$apply();
+    //     expect($rootScope.allTrips).toBe('trips Data');
+    // });
 
 });

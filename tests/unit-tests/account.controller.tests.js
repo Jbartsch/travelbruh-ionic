@@ -33,16 +33,4 @@ describe("Account controller", function() {
     it("should have a $scope variable", function() {
         expect($scope).toBeDefined();
     });
-    it("should delete the id from the local storage", function() {
-        $scope.logout();
-        expect(sessionService.delete).toHaveBeenCalledWith('id');
-    });
-    it("should delete the name from the local storage", function() {
-        $scope.logout();
-        expect(sessionService.delete).toHaveBeenCalledWith('name');
-    });
-    it("should delete the session from the local storage", function() {
-        $scope.logout();
-        expect(sessionService.delete).toHaveBeenCalledWith('session');
-    });
 });
