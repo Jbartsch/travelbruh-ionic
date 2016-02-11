@@ -1,4 +1,4 @@
-angular.module('starter.controllers', ['google.places'])
+angular.module('starter.controllers', ['google.places', 'ngMessages'])
 
 .controller('DashCtrl', function($scope, $rootScope, sessionService) {
 
@@ -96,7 +96,7 @@ angular.module('starter.controllers', ['google.places'])
 .controller('TripDetailEditCtrl', ['$scope', '$rootScope', '$stateParams', 'tripsService', '$location',
     function($scope, $rootScope, $stateParams, tripsService, $location) {
         tripsService.getOne($stateParams.tripId).then(function(data) {
-                $rootScope.trip = data.data[0];
+            $rootScope.trip = data.data[0];
 
         });
 
@@ -142,7 +142,7 @@ angular.module('starter.controllers', ['google.places'])
                     }
                 }).catch(function() {
                     // @todo add a fail message
-                    $scope.error = 'There has been an error!';
+                    $scope.error = 'Something went wrong, try again!';
 
                 });
         };
@@ -158,16 +158,21 @@ angular.module('starter.controllers', ['google.places'])
         $scope.register = function(user) {
             loginService.doRegister($scope.user.email, $scope.user.email, $scope.user.pass)
                 .then(function(data) {
-                    $scope.data = data;
-                    $state.go('tab.trips');
+                    if (data) {
+                        $scope.data = data;
+                        if ($scope.data.status === 201) {
+                            $scope.user.name = '';
+                            $scope.user.email = '';
+                            $scope.user.pass = '';
+                            $scope.error = 'Login success';
+                            $state.go('tab.trips');
+                        } else {
+                            $scope.error = 'Login data incorrect';
+                        }
+                    } else {
+                        $scope.error = 'Login data incorrect';
+                    }
 
-                    // if ($scope.data.status === '201') {
-                    //     $scope.user.name = '';
-                    //     $scope.user.email = '';
-                    //     $scope.user.pass = '';
-                    // } else {
-                    //     $scope.error = 'Login data incorrect';
-                    // }
                 }).catch(function() {
                     // @todo add a fail message
                     $scope.error = 'There has been an error!';

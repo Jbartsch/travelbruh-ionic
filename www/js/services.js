@@ -29,7 +29,9 @@ angular.module('starter.services', [])
                     sessionService.set('session', true);
                 }
                 return response.data;
-            }).catch(function(response) {});
+            }).catch(function(response) {
+                return response;
+            });
 
         }
 
@@ -66,7 +68,10 @@ angular.module('starter.services', [])
                     sessionService.set('password', password);
                     sessionService.set('session', true);
                 }
-            }).catch(function(response) {});
+                return response;
+            }).catch(function(response) {
+                return response;
+            });
             console.log('user not created');
         }
 

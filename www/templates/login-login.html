@@ -1,17 +1,31 @@
 <ion-view view-title="TravelBruh Login" has-header="true" class="login">
     <ion-content class="padding has-header">
-
         <div class="list list-inset">
-        <p class="assertive">{{error}}</p>
-            <form ng-submit="login()" class="form-signin simple-form">
-                <label class="item item-input item-floating-label">
-                    <span class="input-label">Email</span>
-                    <input ng-model="user.name" type="text" placeholder="Email" required>
+            <p ng-if="error" class="assertive text-center"><strong><i class="ion-bug"></i> {{error}}</strong></p>
+            <form name="signinForm" novalidate="" ng-submit="login()" class="form-signin simple-form">
+
+
+                <!-- Username -->
+                <label class="item item-input" ng-class="{ 'has-error-lr' : signinForm.username.$invalid  && signinForm.$submitted, 'valid-lr' : signinForm.username.$valid  && signinForm.$submitted}">
+                    <input type="text" placeholder="email or username" name="username" ng-model="user.name" ng-minlength="5" ng-maxlength="30" required>
                 </label>
-                <label class="item item-input item-floating-label">
-                    <span class="input-label">Password</span>
-                    <input ng-model="user.pass" type="password" placeholder="Password" required>
+                <div class="form-errors" ng-messages="signinForm.username.$error" ng-show="signinForm.username.$error && signinForm.$submitted">
+                    <div ng-messages-include="templates/form-errors.html">
+                        <div class="form-error" ng-message="maxlength">This field is must be less than 30 characters</div>
+                    </div>
+                </div>
+
+
+                <!-- Password -->
+                <label class="item item-input" ng-class="{ 'has-error-lr' : signinForm.password.$invalid  && signinForm.$submitted, 'valid-lr' : signinForm.password.$valid  && signinForm.$submitted}">
+                    <input type="password" name="password" placeholder="password" ng-model="user.pass" ng-minlength="5" ng-maxlength="25" required>
                 </label>
+                <div class="form-errors" ng-show="signinForm.password.$error && signinForm.$submitted" ng-messages="signinForm.password.$error">
+                    <div ng-messages-include="templates/form-errors.html"></div>
+                </div>
+
+
+                <!-- Submit Button -->
                 <button class="button button-balanced button-full icon ion-log-in" type="submit">
                     Login
                 </button>
@@ -22,3 +36,8 @@
         </button>
     </ion-content>
 </ion-view>
+<script id="templates/form-errors.html" type="text/ng-template">
+    <div class="form-error" ng-message="required">This field is required.</div>
+    <div class="form-error" ng-message="minlength">This field is must be at least 5 characters.</div>
+    <div class="form-error" ng-message="maxlength">This field is must be less than 50 characters</div>
+</script>
