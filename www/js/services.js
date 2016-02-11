@@ -7,8 +7,6 @@ angular.module('starter.services', [])
         var loginService = {};
 
         loginService.doLogin = function(username, password) {
-            var username = username;
-            var password = password;
             return $http({
                 method: 'POST',
                 data: {
@@ -31,10 +29,47 @@ angular.module('starter.services', [])
                     sessionService.set('session', true);
                 }
                 return response.data;
-            }).catch(function(response) {
-            });
+            }).catch(function(response) {});
 
         }
+
+        loginService.doRegister = function(username, email, password) {
+            function getToken() {
+                return $http({
+                    method: 'GET',
+                    url: $rootScope.baseUrl + '/rest/session/token'
+
+                }).then(function(response) {
+                    $rootScope.csrfToken = response.data;
+                });
+            };
+            getToken();
+            return $http({
+                method: 'POST',
+                data: {
+                    "name": username,
+                    "mail": email,
+                    'pass': password,
+                    "status": 1
+                },
+                url: $rootScope.baseUrl + '/entity/user',
+                headers: {
+                    "content-type": "application/json",
+                    "accept": "application/json",
+                    'X-CSRF-Token': $rootScope.csrfToken
+                }
+            }).then(function(response) {
+                if (response.status === 201) {
+                    var authdata = Base64.encode(username + ':' + password);
+                    sessionService.set('authdata', authdata);
+                    sessionService.set('username', username);
+                    sessionService.set('password', password);
+                    sessionService.set('session', true);
+                }
+            }).catch(function(response) {});
+            console.log('user not created');
+        }
+
         loginService.doLogout = function() {
             sessionService.delete('id');
             sessionService.delete('name');
@@ -111,7 +146,7 @@ angular.module('starter.services', [])
                 getAll: function() {
                     return $http({
                         method: 'GET',
-                        url: $rootScope.baseUrl + '/api/v1/itinerary/',
+                        url: $rootScope.baseUrl + '/api/v1/itinerary/all/' + username,
                         headers: {
                             'content-type': 'application/json',
                         }

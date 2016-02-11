@@ -4,28 +4,21 @@
   The FriendsCtrl pulls data from the Friends service (service.js)
   The Friends service returns an array of friend data
 -->
-<ion-view view-title="{{trip.name}}">
+<ion-view view-title="{{trip.title[0].value}}" ng-init="getTrip()">
     <ion-content class="padding">
-
-<div class="list card">
-
-  <div class="item">
-    <h2>{{trip.title[0].value}}</h2>
-    <p>November 05, 1955</p>
-  </div>
-
-  <div class="item item-body">
-    <p>
-      {{trip.body[0].value}}
-    </p>
-  </div>
-
-</div>
-
-
-
-
-
-
+        <div class="list card">
+            <div class="item">
+                <h2>{{trip.title[0].value}}</h2>
+                <p>November 05, 1955</p>
+            </div>
+            <div class="item item-body">
+                <p>
+                    {{trip.body[0].value}}
+                </p>
+            </div>
+        </div>
+        <button class="button button-balanced button-full icon ion-edit" ui-sref="tab.trip-detail-edit({tripId: trip.nid[0].value})">
+            Edit
+        </button>
     </ion-content>
 </ion-view>
