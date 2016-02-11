@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['google.places'])
 
 .controller('DashCtrl', function($scope, $rootScope, sessionService) {
 
@@ -50,7 +50,7 @@ angular.module('starter.controllers', [])
         };
         postData.title = [];
         postData.title[0] = {
-            "value": destination
+            "value": destination.address_components[0].long_name
         };
         postData.body = [];
         postData.body[0] = {
