@@ -1,0 +1,41 @@
+<!--
+  This template loads for the 'tab.friend-detail' state (app.js)
+  'friend' is a $scope variable created in the FriendsCtrl controller (controllers.js)
+  The FriendsCtrl pulls data from the Friends service (service.js)
+  The Friends service returns an array of friend data
+-->
+<ion-view view-title="Edit trip">
+    <ion-content class="padding has-header">
+
+<div class="list">
+  <form ng-submit="addTrip(destination, body)" class="form-signin simple-form">
+      <div class="list">
+          <label class="item item-input">
+              <input ng-model="trip.title[0].value" type="text" placeholder="Destination">
+          </label>
+          <label class="item item-input">
+              <textarea ng-model="trip.body[0].value" placeholder="Comments" rows="4"></textarea>
+          </label>
+      </div>
+      <ion-toggle ng-model="advanced" toggle-class="toggle-calm">Advanced</ion-toggle>
+      <div ng-if="advanced">
+          <label class="item item-input">
+              <span class="input-label">From</span>
+              <input type="date">
+          </label>
+          <label class="item item-input">
+              <span class="input-label">To</span>
+              <input type="date">
+          </label>
+          <ion-list>
+              <ion-checkbox ng-model="cityTrip">City Trip</ion-checkbox>
+              <ion-checkbox ng-model="dayTrip">Day Trip</ion-checkbox>
+          </ion-list>
+      </div>
+      <button class="button button-balanced button-full icon ion-android-send" type="submit">
+          Update trip
+      </button>
+  </form>
+</div>
+    </ion-content>
+</ion-view>

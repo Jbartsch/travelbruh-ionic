@@ -14,6 +14,7 @@ angular.module('starter.controllers', ['google.places'])
     function($scope, $rootScope, $state, tripsService) {
         $scope.getTrips = function getTrips() {
             tripsService.getAll().then(function(data) {
+                $rootScope.allTrips = data.data;
             });
         };
         $scope.doRefresh = function() {
@@ -50,7 +51,7 @@ angular.module('starter.controllers', ['google.places'])
         };
         postData.title = [];
         postData.title[0] = {
-            "value": destination.address_components[0].long_name
+            "value": destination
         };
         postData.body = [];
         postData.body[0] = {
@@ -69,16 +70,34 @@ angular.module('starter.controllers', ['google.places'])
 
 
         tripsService.set(postData).then(function(data) {
+            console.log(data);
             $state.go('tab.trips');
             tripsService.getAll();
         }).catch(function(data) {});
     };
 }])
 
-.controller('TripDetailCtrl', ['$scope', '$rootScope', '$stateParams', 'tripsService', '$location',
+.controller('TripDetailCtrl', ['$scope', '$rootScope', '$state', '$stateParams',
+    'tripsService', '$location',
+    function($scope, $rootScope, $state, $stateParams, tripsService, $location) {
+
+        $scope.getTrip = function() {
+            tripsService.getOne($stateParams.tripId).then(function(data) {
+                $rootScope.trip = data.data[0];
+            });
+        };
+        $scope.edit = function(id) {
+            $state.go('tab.trip-detail-edit', id);
+        };
+
+    }
+])
+
+.controller('TripDetailEditCtrl', ['$scope', '$rootScope', '$stateParams', 'tripsService', '$location',
     function($scope, $rootScope, $stateParams, tripsService, $location) {
         tripsService.getOne($stateParams.tripId).then(function(data) {
-            $rootScope.trip = data.data[0];
+                $rootScope.trip = data.data[0];
+
         });
 
     }
@@ -88,7 +107,20 @@ angular.module('starter.controllers', ['google.places'])
     function($scope, sessionService, $state, $rootScope, loginService) {
         $scope.logout = function() {
             loginService.doLogout();
-            $state.go('login');
+            $state.go('login.home');
+
+        };
+    }
+])
+
+.controller('HomeCtrl', ['$scope', '$state', 'sessionService', 'loginService',
+    function($scope, $state, sessionService, loginService) {
+        $scope.user = {};
+        $scope.goRegister = function() {
+            $state.go('login.register');
+        };
+        $scope.goLogin = function() {
+            $state.go('login.login');
 
         };
     }
@@ -114,8 +146,33 @@ angular.module('starter.controllers', ['google.places'])
 
                 });
         };
-        $scope.toDash = function() {
-            $state.go('tab.dash');
+        $scope.toHome = function() {
+            $state.go('login.home');
         }
+    }
+])
+
+.controller('RegisterCtrl', ['$scope', '$state', 'sessionService', 'loginService',
+    function($scope, $state, sessionService, loginService) {
+        $scope.user = {};
+        $scope.register = function(user) {
+            loginService.doRegister($scope.user.email, $scope.user.email, $scope.user.pass)
+                .then(function(data) {
+                    $scope.data = data;
+                    $state.go('tab.trips');
+
+                    // if ($scope.data.status === '201') {
+                    //     $scope.user.name = '';
+                    //     $scope.user.email = '';
+                    //     $scope.user.pass = '';
+                    // } else {
+                    //     $scope.error = 'Login data incorrect';
+                    // }
+                }).catch(function() {
+                    // @todo add a fail message
+                    $scope.error = 'There has been an error!';
+
+                });
+        };
     }
 ]);

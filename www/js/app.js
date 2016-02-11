@@ -35,7 +35,14 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         templateUrl: 'templates/tabs.html',
     })
 
-    // Each tab has its own nav history stack:
+    // setup an abstract state for the tabs directive
+
+    .state('login', {
+            url: '/login',
+            abstract: true,
+            templateUrl: 'templates/login.html',
+        })
+        // Each tab has its own nav history stack:
 
     .state('tab.trips', {
         url: '/trips',
@@ -47,7 +54,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         },
         onEnter: function($state, sessionService) {
             if (!sessionService.get('session')) {
-                $state.go('login');
+                $state.go('login.home');
             }
         }
     })
@@ -62,7 +69,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         },
         onEnter: function($state, sessionService) {
             if (!sessionService.get('session')) {
-                $state.go('login');
+                $state.go('login.home');
             }
         }
     })
@@ -77,7 +84,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         },
         onEnter: function($state, sessionService) {
             if (!sessionService.get('session')) {
-                $state.go('login');
+                $state.go('login.home');
             }
         }
     })
@@ -92,7 +99,22 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         },
         onEnter: function($state, sessionService) {
             if (!sessionService.get('session')) {
-                $state.go('login');
+                $state.go('login.home');
+            }
+        }
+    })
+
+    .state('tab.trip-detail-edit', {
+        url: '/trips/:tripId/edit',
+        views: {
+            'tab-trips': {
+                templateUrl: 'templates/trip-detail-edit.html',
+                controller: 'TripDetailEditCtrl'
+            }
+        },
+        onEnter: function($state, sessionService) {
+            if (!sessionService.get('session')) {
+                $state.go('login.home');
             }
         }
     })
@@ -107,23 +129,56 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         },
         onEnter: function($state, sessionService) {
             if (!sessionService.get('session')) {
-                $state.go('login');
+                $state.go('login.home');
             }
         }
     })
 
-    .state('login', {
+    .state('login.home', {
+        url: '/home',
+        views: {
+            'login-page': {
+                templateUrl: 'templates/login-home.html',
+                controller: 'HomeCtrl',
+                onEnter: function($state, sessionService) {
+                    if (sessionService.get('session')) {
+                        $state.go('tab.trips');
+                    }
+                }
+            }
+        }
+    })
+
+    .state('login.login', {
         url: '/login',
-        templateUrl: 'templates/login.html',
-        controller: 'LoginCtrl',
-        onEnter: function($state, sessionService) {
-            if (sessionService.get('session')) {
-                $state.go('tab.trips');
+        views: {
+            'login-page': {
+                templateUrl: 'templates/login-login.html',
+                controller: 'LoginCtrl',
+                onEnter: function($state, sessionService) {
+                    if (sessionService.get('session')) {
+                        $state.go('tab.trips');
+                    }
+                }
+            }
+        }
+    })
+
+    .state('login.register', {
+        url: '/register',
+        views: {
+            'login-page': {
+                templateUrl: 'templates/login-register.html',
+                controller: 'RegisterCtrl',
+                onEnter: function($state, sessionService) {
+                    if (sessionService.get('session')) {
+                        $state.go('tab.trips');
+                    }
+                }
             }
         }
     });
 
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/tab/trips');
-
 });
