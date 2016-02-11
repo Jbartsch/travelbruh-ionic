@@ -33,4 +33,7 @@ describe("Account controller", function() {
     it("should have a $scope variable", function() {
         expect($scope).toBeDefined();
     });
+    it("should have a $scope variable", function() {
+        expect($scope.logout).toBeDefined();
+    });
 });
