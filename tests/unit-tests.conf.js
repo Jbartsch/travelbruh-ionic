@@ -21,6 +21,7 @@ module.exports = function(config) {
             '../www/lib/angular-animate/angular-animate.js',
             '../www/lib/angular-sanitize/angular-sanitize.js',
             '../www/lib/angular-google-places-autocomplete/src/autocomplete.js',
+            '../www/lib/angular-messages/angular-messages.js',
             // App code
             '../www/js/*.js',
             // Test files

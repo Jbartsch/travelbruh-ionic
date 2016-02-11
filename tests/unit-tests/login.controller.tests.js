@@ -57,7 +57,7 @@ describe("Login controller", function() {
         deferred.reject();
         $scope.login();
         $rootScope.$apply();
-        expect($scope.error).toBe('There has been an error!');
+        expect($scope.error).toBe('Something went wrong, try again!');
     });
     it('should have called the login service', function() {
         deferred.resolve({
